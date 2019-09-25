@@ -1,9 +1,12 @@
 package the.flash.server.handler.inbound;
 
 import com.alibaba.fastjson.JSON;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import the.flash.protocol.PacketCodeC;
 import the.flash.protocol.request.LoginRequestPacket;
+import the.flash.protocol.response.LoginResponsePacket;
 
 public class LoginCheck extends ChannelInboundHandlerAdapter {
 
@@ -20,6 +23,11 @@ public class LoginCheck extends ChannelInboundHandlerAdapter {
             System.out.println("close success!!!!");
           }
         });
+        LoginResponsePacket loginResponsePacket = new LoginResponsePacket();
+        loginResponsePacket.setSuccess(false);
+        loginResponsePacket.setReason("密码不对 请重新输入!!!");
+        ByteBuf encode = PacketCodeC.INSTANCE.encode(ctx.channel().alloc(), loginResponsePacket);
+        ctx.channel().writeAndFlush(encode);
       } else {
         ctx.fireChannelRead(msg);
         System.out.println(loginRequestPacket.toString());

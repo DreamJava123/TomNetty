@@ -12,9 +12,6 @@ import the.flash.server.handler.TomCodec;
 import the.flash.server.handler.inbound.InBoundHandlerB;
 import the.flash.server.handler.inbound.InBoundHandlerC;
 import the.flash.server.handler.inbound.LoginCheck;
-import the.flash.server.handler.outbound.OutBoundHandlerA;
-import the.flash.server.handler.outbound.OutBoundHandlerB;
-import the.flash.server.handler.outbound.OutBoundHandlerC;
 
 public class NettyServer {
 
@@ -39,11 +36,6 @@ public class NettyServer {
             ch.pipeline().addLast(new LoginCheck());
             ch.pipeline().addLast(new InBoundHandlerB());
             ch.pipeline().addLast(new InBoundHandlerC());
-
-            // outBound，处理写数据的逻辑链
-            ch.pipeline().addLast(new OutBoundHandlerA());
-            ch.pipeline().addLast(new OutBoundHandlerB());
-            ch.pipeline().addLast(new OutBoundHandlerC());
           }
         });
 
