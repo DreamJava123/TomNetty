@@ -4,7 +4,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by TOM
@@ -12,14 +11,16 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class TomCodec extends ByteToMessageDecoder {
 
-  private AtomicInteger atomicInteger = new AtomicInteger(0);
+  private static final int MAGIC_NUMBER = 0x12345678;
 
   @Override
   protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-    System.out.println("----------");
-    System.out.println(in.readableBytes());
-    System.out.println(in.readInt());
-    out.add("ddd" + atomicInteger.addAndGet(1));
-    //ctx.fireChannelRead("dsadas");
+    System.out.println(MAGIC_NUMBER);
+    System.out.println(in.getInt(0));
+    if (in.getInt(0) != MAGIC_NUMBER) {
+      ctx.channel().close();
+      return;
+    }
+    ctx.fireChannelRead(in);
   }
 }
