@@ -7,7 +7,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import java.util.Date;
-import the.flash.server.handler.TomCodec;
 import the.flash.server.handler.inbound.InBoundHandlerA;
 import the.flash.server.handler.inbound.InBoundHandlerB;
 import the.flash.server.handler.inbound.InBoundHandlerC;
@@ -33,7 +32,6 @@ public class NettyServer {
         .childHandler(new ChannelInitializer<NioSocketChannel>() {
           protected void initChannel(NioSocketChannel ch) {
             // inBound，处理读数据的逻辑链
-            ch.pipeline().addLast(new TomCodec());
             ch.pipeline().addLast(new InBoundHandlerA());
             ch.pipeline().addLast(new InBoundHandlerB());
             ch.pipeline().addLast(new InBoundHandlerC());
